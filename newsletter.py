@@ -61,10 +61,10 @@ def send_email(data):
 @tryton.transaction()
 def unsubscriber(lang):
     '''Unsubscription all newsletters'''
+    email = request.form.get('email', None)
+
     form = NewsletterForm()
     if form.validate_on_submit():
-        email = request.form.get('email')
-
         with Transaction().set_context(active_test=False):
             contacts = NewsletterContact.search([
                 ('email', '=', email),
@@ -76,19 +76,21 @@ def unsubscriber(lang):
         else:
             flash(_('Your email %s not found in our newsletter!' % email))
 
-        form.reset()
+    if email and not form.validate_on_submit():
+        flash(_('Email is not valid!'), 'danger')
 
+    form.reset()
     return render_template('newsletter-unsubscriber.html', form=form)
 
 @newsletter.route("/subscriber", methods=["GET", "POST"], endpoint="subscriber")
 @tryton.transaction()
 def subscriber(lang):
     '''Subscription'''
+    name = request.form.get('name', None)
+    email = request.form.get('email', None)
+    
     form = NewsletterForm()
     if form.validate_on_submit():
-        name = request.form.get('name', None)
-        email = request.form.get('email')
-
         data = {
             'email': email,
             'active': True,
@@ -127,8 +129,10 @@ def subscriber(lang):
             if NEWSLETTER_EMAIL:
                 send_email(data)
 
-        form.reset()
+    if email and not form.validate_on_submit():
+        flash(_('Email is not valid!'), 'danger')
 
+    form.reset()
     return render_template('newsletter-subscriber.html', form=form)
 
 @newsletter.route("/", endpoint="news")

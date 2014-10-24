@@ -1,0 +1,20 @@
+Installing flask-galatea_newsletter
+===================================
+
+Prerequisites
+-------------
+
+ * Python 2.7 or later (http://www.python.org/)
+ * trytond (http://www.tryton.org/)
+ * trytond-galatea
+
+Installation
+------------
+
+Once you've downloaded and unpacked the flask-galatea-newsletter source release,
+copy galatea-cms directory in main flask app and rename to cms.
+
+Edit your App flask and register a new blueprint:
+
+from newsletter import newsletter
+app.register_blueprint(newsletter, url_prefix='/<lang>/newsletter')

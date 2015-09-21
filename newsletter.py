@@ -72,9 +72,9 @@ def unsubscriber(lang):
 
         if contacts:
             NewsletterContact.write(contacts, {'active': False})
-            flash(_('Unsubscribed %s in our newsletter!' % email))
+            flash(_('Unsubscribed "{email}" in our newsletter!').format(email=email))
         else:
-            flash(_('Your email %s not found in our newsletter!' % email))
+            flash(_('Your email "{email}" not found in our newsletter!').format(email=email))
 
     if email and not form.validate_on_submit():
         flash(_('Email is not valid!'), 'danger')

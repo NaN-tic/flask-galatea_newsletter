@@ -3,10 +3,10 @@
 #the full copyright notices and license terms.
 from flask import Blueprint, request, render_template, flash, current_app, \
     redirect, url_for, g
-from flask.ext.babel import gettext as _
-from flask.ext.wtf import Form
+from flask_babel import gettext as _
+from flask_wtf import Form
+from flask_mail import Mail, Message
 from wtforms import TextField, validators
-from flask.ext.mail import Mail, Message
 from galatea.tryton import tryton
 from trytond.transaction import Transaction
 

@@ -6,7 +6,7 @@ from flask import Blueprint, request, render_template, flash, current_app, \
 from flask_babel import gettext as _
 from flask_wtf import Form
 from flask_mail import Mail, Message
-from wtforms import TextField, validators
+from wtforms import StringField, validators
 from galatea.tryton import tryton
 from trytond.transaction import Transaction
 
@@ -20,8 +20,8 @@ NewsletterContact = tryton.pool.get('newsletter.contact')
 
 class NewsletterForm(Form):
     "Newsletter form"
-    name = TextField(_('Name'))
-    email = TextField(_('Email'), [validators.Required(), validators.Email()])
+    name = StringField(_('Name'))
+    email = StringField(_('Email'), [validators.Required(), validators.Email()])
 
     def __init__(self, *args, **kwargs):
         Form.__init__(self, *args, **kwargs)

@@ -1,10 +1,10 @@
 #This file is part newsletter blueprint for Flask.
-#The COPYRIGHT file at the top level of this repository contains 
+#The COPYRIGHT file at the top level of this repository contains
 #the full copyright notices and license terms.
 from flask import Blueprint, request, render_template, flash, current_app, \
     redirect, url_for, g
 from flask_babel import gettext as _
-from flask_wtf import Form
+from flask_wtf import FlaskForm as Form
 from flask_mail import Mail, Message
 from wtforms import StringField, validators
 from galatea.tryton import tryton
@@ -88,7 +88,7 @@ def subscriber(lang):
     '''Subscription'''
     name = request.form.get('name', None)
     email = request.form.get('email', None)
-    
+
     form = NewsletterForm()
     if form.validate_on_submit():
         data = {

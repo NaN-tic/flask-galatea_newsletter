@@ -5,7 +5,6 @@ from flask import Blueprint, request, render_template, flash, current_app, \
     redirect, url_for, g
 from flask_babel import gettext as _
 from flask_wtf import FlaskForm as Form
-from flask_mail import Mail, Message
 from wtforms import StringField, validators
 from galatea.tryton import tryton
 from trytond.transaction import Transaction
@@ -13,7 +12,6 @@ from trytond.transaction import Transaction
 newsletter = Blueprint('newsletter', __name__, template_folder='templates')
 
 NEWSLETTER_LISTS = current_app.config.get('TRYTON_NEWSLETTER_LISTS', [])
-NEWSLETTER_EMAIL = current_app.config.get('TRYTON_NEWSLETTER_EMAIL_SUBSCRIBER', False)
 
 NewsletterContact = tryton.pool.get('newsletter.contact')
 
@@ -35,26 +33,6 @@ class NewsletterForm(Form):
     def reset(self):
         self.name.data = ''
         self.email.data = ''
-
-def send_email(data):
-    """
-    Send an newsletter email
-    :param data: dict
-    """
-    mail = Mail(current_app)
-
-    subject = '%s %s' % (
-        _('Welcome newsletter'),
-        current_app.config.get('TITLE'),
-        )
-    email = current_app.config.get('DEFAULT_MAIL_SENDER')
-
-    msg = Message(subject,
-            body = render_template('emails/newsletter-text.jinja', data=data),
-            html = render_template('emails/newsletter-html.jinja', data=data),
-            sender = email,
-            recipients = [email, data.get('email')])
-    mail.send(msg)
 
 @newsletter.route("/unsubscriber", methods=["GET", "POST"],
     endpoint="unsubscriber")
@@ -125,9 +103,6 @@ def subscriber(lang):
             NewsletterContact.create([data])
 
             flash(_('Thanks! Your subscription was submitted successfully!'))
-
-            if NEWSLETTER_EMAIL:
-                send_email(data)
 
     if email and not form.validate_on_submit():
         flash(_('Email is not valid!'), 'danger')

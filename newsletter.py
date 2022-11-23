@@ -19,7 +19,7 @@ NewsletterContact = tryton.pool.get('newsletter.contact')
 class NewsletterForm(Form):
     "Newsletter form"
     name = StringField(_('Name'))
-    email = StringField(_('Email'), [validators.Required(), validators.Email()])
+    email = StringField(_('Email'), [validators.DataRequired(), validators.Email()])
 
     def __init__(self, *args, **kwargs):
         Form.__init__(self, *args, **kwargs)
